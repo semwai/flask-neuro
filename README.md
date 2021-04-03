@@ -4,7 +4,7 @@
 set FLASK_APP=app.py \
 set FLASK_ENV=development \
 python -m flask \
-flask run \
+flask run 
 
 Была создана сеть, способная различать стандартное чб изображение. Сеть была сохранена в файле model.h5.
 ![notebook](data/notebook.png)
