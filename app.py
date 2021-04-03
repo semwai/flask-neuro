@@ -34,23 +34,8 @@ def get_image():
     plt.imshow(img_source)
     plt.title(f"Я думаю это число %d" % (pred))
     plt.axis('off')
-    plt.savefig('static/fig1.jpg')
+    imgName = 'out/fig' + np.str(np.random.rand())[2:] + '.jpg'
+    plt.savefig('static/' + imgName)
     plt.close()
-    #return app.send_static_file('fig1.jpg')
-    #return redirect('/index.html?pred=' + np.str(pred))
-    return render_template('index.html', photo='fig1.jpg')
-
-"""
-model = keras.Sequential(
-    [
-        keras.Input(shape=input_shape),
-        layers.Conv2D(32, kernel_size=(3, 3), activation="relu"), # количество и размер сверточных слоев
-        layers.MaxPooling2D(pool_size=(2, 2)),
-        layers.Conv2D(64, kernel_size=(3, 3), activation="relu"),
-        layers.MaxPooling2D(pool_size=(2, 2)),
-        layers.Flatten(),
-        layers.Dropout(0.5),
-        layers.Dense(num_classes, activation="softmax"),
-    ]
-)
-"""
+    return render_template('index.html', photo=imgName)
+ 
