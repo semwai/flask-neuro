@@ -1,0 +1,34 @@
+<!doctype html>
+<title>Hello from Flask</title>
+<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
+<div class="container">
+    <p class="alert alert-success">Просто засунь изображеньку разрешением 28 на 28 пикселей с нарисованным числом от 0 до 9</p>
+    <form method="POST" action="load" class="was-validated" enctype="multipart/form-data">
+        <div class="input-group">
+            <div class="custom-file">
+              <input type="file" class="custom-file-input" id="inputGroupFile04" name='image'>
+              <label class="custom-file-label" for="inputGroupFile04">Изображение</label>
+            </div>
+            <div class="input-group-append">
+              <input type="submit" class="btn btn-outline-secondary" type="button" value="Отправить">
+            </div>
+        </div>
+    </form>
+    <p class="d-flex justify-content-center">
+        <h2>Пример изображений</h2>
+        <img src="static/image1.jpg" />
+        <img src="static/image3.jpg" />
+    </p>
+
+    {% if photo %}
+    <p class="d-flex justify-content-center">
+        <img src="static/{{photo}}" />
+    </p>
+    {% endif %}
+
+    {% if pred %}
+    <p class="d-flex justify-content-center">
+        <h1>{{photo}}"<h1/>
+    </p>
+    {% endif %}
+</div>
