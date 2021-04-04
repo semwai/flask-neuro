@@ -17,22 +17,21 @@ def hello_world():
 
 @app.route('/load', methods=['POST'])
 def get_image():
-    #try:
-    #f = #image.imread(request.files['image'])
+    try:
         
-    img, img_data = normalizeImage(request.files['image'])
-    n = np.array([img_data]) 
+        img, img_data = normalizeImage(request.files['image'])
+        n = np.array([img_data]) 
 
-    pred = np.argmax([model.predict(n)])
-    plt.imshow(img, cmap='gray')
-    plt.title(f"Я думаю это число %d" % (pred))
-    plt.axis('off')
-    imgName = 'out/fig' + np.str(np.random.rand())[2:] + '.jpg'
-    plt.savefig('static/' + imgName)
-    plt.close()
-    return 'static/' + imgName
-    #except Exception as e:
-    #    return Response(str(e), status=500)
+        pred = np.argmax([model.predict(n)])
+        plt.imshow(img, cmap='gray')
+        plt.title(f"Я думаю это число %d" % (pred))
+        plt.axis('off')
+        imgName = 'out/fig' + np.str(np.random.rand())[2:] + '.jpg'
+        plt.savefig('static/' + imgName)
+        plt.close()
+        return 'static/' + imgName
+    except Exception as e:
+        return Response(str(e), status=500)
         #return "static/out/fig3870747312784326.jpg"
 
 
