@@ -1,5 +1,5 @@
 <!doctype html>
-<title>Hello from Flask</title>
+<title>Semwai/flask-neuro</title>
 <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
 <div class="container">
     <p class="alert alert-success">Сеть анализирует изображение и пишет какое число на нем изображено</p>
@@ -37,10 +37,15 @@
         <h1>{{photo}}"<h1/>
     </p>
     {% endif %}
+
 </div>
+
+
+
 <script>
 console.log('Hi')
 async function load() {
+    pred.innerHTML = `<img width=55 height=55 src='static/load.gif'/>`
     let form = document.getElementById('form1')
     console.log(form)
     let res = await fetch('/load', {

@@ -1,4 +1,4 @@
-from flask import Flask, render_template, request, redirect, url_for, Response, send_file
+from flask import Flask, render_template, request, redirect, url_for, Response, send_file, send_from_directory
 from matplotlib import image
 import matplotlib.pyplot as plt
 import numpy as np 
@@ -9,7 +9,13 @@ from PIL import Image
 
 app = Flask(__name__)
 
+ 
+
 model = load_model('model.h5')
+
+@app.route('/favicon.ico')
+def favicon():
+    return send_from_directory('static', 'favicon.png', mimetype='image/png')
 
 @app.route('/')
 def hello_world():
