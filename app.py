@@ -1,13 +1,11 @@
-from flask import Flask
-from flask import render_template
-from flask import request, redirect, url_for
-from flask import send_file
+from flask import Flask, render_template, request, redirect, url_for, Response, send_file
 from matplotlib import image
 import matplotlib.pyplot as plt
 import numpy as np 
 from tensorflow import keras
 from tensorflow.keras import layers
 from tensorflow.keras.models import load_model
+from PIL import Image
 
 app = Flask(__name__)
 
@@ -19,23 +17,28 @@ def hello_world():
 
 @app.route('/load', methods=['POST'])
 def get_image():
-    f = request.files['image']
+    #try:
+    #f = #image.imread(request.files['image'])
         
-     
-    img_source = image.imread(f) # 28 * 28 
-    img = img_source.astype(np.float32)
-    img = [[ [img[i][j][0] + img[i][j][1] + img[i][j][2]] for j in range(28)] for i in range(28)] 
-    n = np.array([img]) / (255*3)
+    img, img_data = normalizeImage(request.files['image'])
+    n = np.array([img_data]) 
 
-    
-
-    pred = np.argmax(model.predict(n))
-    print(pred)
-    plt.imshow(img_source)
+    pred = np.argmax([model.predict(n)])
+    plt.imshow(img, cmap='gray')
     plt.title(f"Я думаю это число %d" % (pred))
     plt.axis('off')
     imgName = 'out/fig' + np.str(np.random.rand())[2:] + '.jpg'
     plt.savefig('static/' + imgName)
     plt.close()
-    return render_template('index.html', photo=imgName)
- 
+    return 'static/' + imgName
+    #except Exception as e:
+    #    return Response(str(e), status=500)
+        #return "static/out/fig3870747312784326.jpg"
+
+
+def normalizeImage(file):
+    img_source = Image.open(file)
+    img_source = img_source.resize((28,28))
+    img = np.array([[img_source.getdata()[(i*28 + j)][0] + img_source.getdata()[(i*28 + j)][1] + img_source.getdata()[(i*28 + j)][2] for j in range(28)] for i in range(28)]) / (3 * 255)
+    img_data = [[ [img[i][j]] for j in range(28)] for i in range(28)]
+    return img, img_data

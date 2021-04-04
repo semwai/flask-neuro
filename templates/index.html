@@ -2,15 +2,16 @@
 <title>Hello from Flask</title>
 <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
 <div class="container">
-    <p class="alert alert-success">Просто засунь изображеньку разрешением 28 на 28 пикселей с нарисованным числом от 0 до 9</p>
-    <form method="POST" action="load" class="was-validated" enctype="multipart/form-data">
+    <p class="alert alert-success">Сеть анализирует изображение и пишет какое число на нем изображено</p>
+    <p class="alert alert-success">Единственное правило - черный фон и светлая цифра</p>
+    <form class="was-validated" id="form1" enctype="multipart/form-data">
         <div class="input-group">
             <div class="custom-file">
               <input type="file" class="custom-file-input" id="inputGroupFile04" name='image'>
               <label class="custom-file-label" for="inputGroupFile04">Изображение</label>
             </div>
             <div class="input-group-append">
-              <input type="submit" class="btn btn-outline-secondary" type="button" value="Отправить">
+              <input type="button" class="btn btn-outline-secondary" type="button" value="Отправить" onclick="load()">
             </div>
         </div>
     </form>
@@ -28,10 +29,31 @@
         <img src="static/{{photo}}" />
     </p>
     {% endif %}
+    <p id=pred class="d-flex justify-content-center">
 
+    </p>
     {% if pred %}
     <p class="d-flex justify-content-center">
         <h1>{{photo}}"<h1/>
     </p>
     {% endif %}
 </div>
+<script>
+console.log('Hi')
+async function load() {
+    let form = document.getElementById('form1')
+    console.log(form)
+    let res = await fetch('/load', {
+        method: 'POST', 
+        body: new FormData(form)
+    })
+    if (res.status == 200){
+        let src = await res.text()
+        pred.innerHTML = `<img src='${src}'/>`
+    } else {
+        let errMsg = await res.text()
+        pred.innerHTML = `<h2>Ошибка: ${errMsg}</h2>`;
+    }
+    
+}
+</script>
