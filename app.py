@@ -11,7 +11,7 @@ app = Flask(__name__)
 
  
 
-model = load_model('model.h5')
+model = load_model('model0249.h5')
 
 @app.route('/favicon.ico')
 def favicon():
@@ -31,7 +31,7 @@ def get_image():
         #pred = np.argmax([model.predict(n)])
         pred = model.predict(n)
         plt.imshow(img, cmap='gray')
-        if (pred.max() < 0.75):
+        if (pred.max() < 0.25):
             plt.title("Я не могу найти тут число")
         else:
             plt.title(f"Я думаю это число %s" % (np.argmax(pred)))
@@ -43,13 +43,18 @@ def get_image():
     except Exception as e:
         return Response(str(e), status=500)
 
-
-
-
-
 def normalizeImage(file):
     img_source = Image.open(file)
     img_source = img_source.resize((28,28))
     img = np.array([[img_source.getdata()[(i*28 + j)][0] + img_source.getdata()[(i*28 + j)][1] + img_source.getdata()[(i*28 + j)][2] for j in range(28)] for i in range(28)]) / (3 * 255)
     img_data = [[ [img[i][j]] for j in range(28)] for i in range(28)]
     return img, img_data
+
+
+
+
+    
+if __name__ == '__main__':
+    app.run(host="192.168.0.125", port=8000, debug=True)
+
+

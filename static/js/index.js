@@ -26,6 +26,8 @@ function getOffset(el) {
   
 // new position from mouse event
 function setPosition(e) {
+    e.preventDefault();
+    e.stopPropagation();
     //console.log(e)
     let cr = canvas.getBoundingClientRect()
     x = e.clientX - cr.left
@@ -42,6 +44,8 @@ function resize() {
 }
 
 function draw(e) {
+    e.preventDefault();
+    e.stopPropagation();
     // mouse left button must be pressed
     if (e.buttons !== 1) return;
     ctx.beginPath(); // begin
