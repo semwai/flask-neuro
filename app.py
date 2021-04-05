@@ -28,9 +28,13 @@ def get_image():
         img, img_data = normalizeImage(request.files['image'])
         n = np.array([img_data]) 
 
-        pred = np.argmax([model.predict(n)])
+        #pred = np.argmax([model.predict(n)])
+        pred = model.predict(n)
         plt.imshow(img, cmap='gray')
-        plt.title(f"Я думаю это число %d" % (pred))
+        if (pred.max() < 0.75):
+            plt.title("Я не могу найти тут число")
+        else:
+            plt.title(f"Я думаю это число %s" % (np.argmax(pred)))
         plt.axis('off')
         imgName = 'out/fig' + np.str(np.random.rand())[2:] + '.jpg'
         plt.savefig('static/' + imgName)
@@ -38,7 +42,9 @@ def get_image():
         return 'static/' + imgName
     except Exception as e:
         return Response(str(e), status=500)
-        #return "static/out/fig3870747312784326.jpg"
+
+
+
 
 
 def normalizeImage(file):

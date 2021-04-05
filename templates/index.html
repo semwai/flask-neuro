@@ -1,67 +1,79 @@
 <!doctype html>
 <title>Semwai/flask-neuro</title>
 <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
+<script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js" integrity="sha384-UO2eT0CpHqdSJQ6hJty5KVphtPhzWj9WO1clHTMGa3JDZwrnQq4sF86dIHNDz0W1" crossorigin="anonymous"></script>
+<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js" integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM" crossorigin="anonymous"></script>
 <meta name="viewport" content="width=device-width, initial-scale=1">
-
-
+<script defer src='static/js/index.js'></script>
 <div class="container">
+    <div class="row">
+
+    <div class="col-lg-7 col-sm-12">
     <p class="alert alert-success" style="margin-top: 15px;"> Сеть анализирует изображение и пишет какое число на нем изображено</p>
-    <p class="alert alert-success">Единственное правило - черный фон и светлая цифра</p>
-    <form class="was-validated" id="form1" enctype="multipart/form-data">
-        <div class="input-group">
-            <div class="custom-file">
-              <input type="file" class="custom-file-input" id="inputGroupFile04" name='image'>
-              <label class="custom-file-label" for="inputGroupFile04">Изображение</label>
-            </div>
-            <div class="input-group-append">
-              <input type="button" class="btn btn-outline-secondary" type="button" value="Отправить" onclick="load()">
-            </div>
-        </div>
-    </form>
-    <p class="d-flex justify-content-center">
-        <h2>Пример изображений</h2>
-        <img src="static/image0.jpg" />
-        <img src="static/image1.jpg" />
-        <img src="static/image2.jpg" />
-        <img src="static/image3.jpg" />
-    </p>
-
-    {% if photo %}
-    <h2>Прогноз:</h2>
-    <p class="d-flex justify-content-center">
-        <img src="static/{{photo}}" />
-    </p>
-    {% endif %}
-    <p id=pred class="d-flex justify-content-center">
-
-    </p>
-    {% if pred %}
-    <p class="d-flex justify-content-center">
-        <h1>{{photo}}"<h1/>
-    </p>
-    {% endif %}
-
-</div>
-
-
-
-<script>
-console.log('Hi')
-async function load() {
-    pred.innerHTML = `<img width=55 height=55 src='static/load.gif'/>`
-    let form = document.getElementById('form1')
-    console.log(form)
-    let res = await fetch('/load', {
-        method: 'POST', 
-        body: new FormData(form)
-    })
-    if (res.status == 200){
-        let src = await res.text()
-        pred.innerHTML = `<img src='${src}'/>`
-    } else {
-        let errMsg = await res.text()
-        pred.innerHTML = `<h2>Ошибка: ${errMsg}</h2>`;
-    }
+    <p class="alert alert-success" >Единственное правило - черный фон и светлая цифра</p>
     
-}
-</script>
+
+    <div class="accordion" id="accordionExample">
+        <div class="card">
+          <div class="card-header" id="headingOne">
+            <h2 class="mb-0">
+              <button class="btn btn-link" type="button" data-toggle="collapse" data-target="#collapseOne" aria-expanded="true" aria-controls="collapseOne">
+                Нарисуй цифру
+              </button>
+            </h2>
+          </div>
+      
+          <div id="collapseOne" class="collapse show" aria-labelledby="headingOne" data-parent="#accordionExample">
+            <div class="card-body">
+                
+                <p class="d-flex justify-content-center" ><canvas id="canvas" width="250" height="250"></canvas></p>
+                <form id="form2" enctype="multipart/form-data"></form>
+                
+                <div class="btn-group d-flex justify-content-center" role="group" aria-label="Basic example">
+                    <button class="btn btn-success" onclick="loadCanvas()">Отправить</button>
+                    <button class="btn btn-danger" onclick="dropCanvas()">Очистить</button>
+                </div>
+                 
+            </div>
+          </div>
+        </div>
+        <div class="card">
+          <div class="card-header" id="headingTwo">
+            <h2 class="mb-0">
+              <button class="btn btn-link collapsed" type="button" data-toggle="collapse" data-target="#collapseTwo" aria-expanded="false" aria-controls="collapseTwo">
+                Отправь файл
+              </button>
+            </h2>
+          </div>
+          <div id="collapseTwo" class="collapse" aria-labelledby="headingTwo" data-parent="#accordionExample">
+            <div class="card-body">
+                <form class="was-validated" id="form1" enctype="multipart/form-data">
+                    <div class="input-group">
+                        <div class="custom-file">
+                          <input type="file" class="custom-file-input" id="inputGroupFile04" name='image'>
+                          <label class="custom-file-label" for="inputGroupFile04">Изображение</label>
+                        </div>
+                        <div class="input-group-append">
+                          <input type="button" class="btn btn-outline-secondary" type="button" value="Отправить" onclick="load()">
+                        </div>
+                    </div>
+                </form>
+                <p class="d-flex justify-content-center">
+                    <h2>Пример изображений</h2>
+                    <img src="static/image0.jpg" />
+                    <img src="static/image1.jpg" />
+                    <img src="static/image2.jpg" />
+                    <img src="static/image3.jpg" />
+                </p>
+            </div>
+          </div>
+        </div>
+      </div>
+
+    </div>
+      
+    <p id=pred style="overflow: hidden; padding: 25px;" class="d-flex justify-content-center col-lg-5 col-sm-12"></p>
+
+    </div>
+</div>
